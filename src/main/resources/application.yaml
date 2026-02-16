@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: dynamic-qr-bot
+
+qr-bot:
+  config-file: ./qr-config.yaml
+  global-admin:

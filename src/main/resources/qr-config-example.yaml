@@ -1,0 +1,6 @@
+mappings:
+  - nickname: "my-poster"
+    staticPath: "poster"
+    destinationUrl: "https://example.com/destination"
+adminWhitelist:
+  - 123456789012345678
