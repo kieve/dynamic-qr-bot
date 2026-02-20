@@ -76,6 +76,37 @@ public class BotConfigService {
         return true;
     }
 
+    public List<QrMapping> getMappings() {
+        return List.copyOf(m_configData.mappings());
+    }
+
+    public synchronized boolean addMapping(String nickname, String staticPath, String destinationUrl) {
+        if (m_byNickname.containsKey(nickname.toLowerCase())
+                || m_byPath.containsKey(normalizeStaticPath(staticPath))) {
+            return false;
+        }
+        QrMapping newMapping = new QrMapping(nickname, staticPath, destinationUrl);
+        List<QrMapping> newList = new ArrayList<>(m_configData.mappings());
+        newList.add(newMapping);
+        m_configData = new BotConfigFile(newList, m_configData.adminWhitelist());
+        rebuildIndexes();
+        save();
+        return true;
+    }
+
+    public synchronized boolean deleteMapping(String nickname) {
+        QrMapping existing = m_byNickname.get(nickname.toLowerCase());
+        if (existing == null) {
+            return false;
+        }
+        List<QrMapping> newList = new ArrayList<>(m_configData.mappings());
+        newList.remove(existing);
+        m_configData = new BotConfigFile(newList, m_configData.adminWhitelist());
+        rebuildIndexes();
+        save();
+        return true;
+    }
+
     public List<String> getNicknames() {
         return m_configData.mappings().stream()
                 .map(QrMapping::nickname)
