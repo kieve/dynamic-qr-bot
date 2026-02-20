@@ -1,0 +1,12 @@
+[Unit]
+Description=Dynamic QR Code Router Bot
+After=network.target
+
+[Service]
+ExecStart=/root/run_qr.sh
+WorkingDirectory=/root
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
