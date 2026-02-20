@@ -12,14 +12,10 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AddQrCommand implements SlashCommand {
-
-    private final QrBotProperties m_properties;
-    private final BotConfigService m_configService;
+public class AddQrCommand extends BaseAdminCommand {
 
     public AddQrCommand(QrBotProperties properties, BotConfigService configService) {
-        m_properties = properties;
-        m_configService = configService;
+        super(properties, configService);
     }
 
     @Override
@@ -34,10 +30,7 @@ public class AddQrCommand implements SlashCommand {
 
     @Override
     public void handle(SlashCommandInteractionEvent event) {
-        long userId = event.getUser().getIdLong();
-        if (!isAuthorized(userId)) {
-            event.reply("You do not have permission to use this command.")
-                    .setEphemeral(true).queue();
+        if (denyIfUnauthorized(event)) {
             return;
         }
 
@@ -64,10 +57,5 @@ public class AddQrCommand implements SlashCommand {
             event.reply("A mapping with that nickname or path already exists.")
                     .setEphemeral(true).queue();
         }
-    }
-
-    private boolean isAuthorized(long userId) {
-        return (m_properties.globalAdmin() != null && m_properties.globalAdmin() == userId)
-                || m_configService.isAdmin(userId);
     }
 }

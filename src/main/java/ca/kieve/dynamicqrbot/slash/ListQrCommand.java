@@ -13,14 +13,10 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class ListQrCommand implements SlashCommand {
-
-    private final QrBotProperties m_properties;
-    private final BotConfigService m_configService;
+public class ListQrCommand extends BaseAdminCommand {
 
     public ListQrCommand(QrBotProperties properties, BotConfigService configService) {
-        m_properties = properties;
-        m_configService = configService;
+        super(properties, configService);
     }
 
     @Override
@@ -32,10 +28,7 @@ public class ListQrCommand implements SlashCommand {
 
     @Override
     public void handle(SlashCommandInteractionEvent event) {
-        long userId = event.getUser().getIdLong();
-        if (!isAuthorized(userId)) {
-            event.reply("You do not have permission to use this command.")
-                    .setEphemeral(true).queue();
+        if (denyIfUnauthorized(event)) {
             return;
         }
 
@@ -53,10 +46,5 @@ public class ListQrCommand implements SlashCommand {
         }
 
         event.reply(sb.toString()).setEphemeral(true).queue();
-    }
-
-    private boolean isAuthorized(long userId) {
-        return (m_properties.globalAdmin() != null && m_properties.globalAdmin() == userId)
-                || m_configService.isAdmin(userId);
     }
 }

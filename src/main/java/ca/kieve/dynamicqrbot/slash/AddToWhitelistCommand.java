@@ -13,14 +13,10 @@ import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AddToWhitelistCommand implements SlashCommand {
-
-    private final QrBotProperties m_properties;
-    private final BotConfigService m_configService;
+public class AddToWhitelistCommand extends BaseAdminCommand {
 
     public AddToWhitelistCommand(QrBotProperties properties, BotConfigService configService) {
-        m_properties = properties;
-        m_configService = configService;
+        super(properties, configService);
     }
 
     @Override
@@ -57,10 +53,5 @@ public class AddToWhitelistCommand implements SlashCommand {
             event.reply("**" + targetUser.getAsTag() + "** is already on the admin whitelist.")
                     .setEphemeral(true).queue();
         }
-    }
-
-    private boolean isGlobalAdmin(long userId) {
-        return m_properties.globalAdmin() != null
-                && m_properties.globalAdmin() == userId;
     }
 }
