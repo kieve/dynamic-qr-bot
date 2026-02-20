@@ -6,22 +6,18 @@ From a Windows machine, run `deploy.bat` to build the JAR and SCP it to the serv
 
 ## One-Time Server Setup
 
-Copy `run_qr.sh` and `qr-bot.service` to the server, then:
+Run `install.bat` from a Windows machine. This will:
+- Copy `run_qr.sh`, `start_qr.sh`, `stop_qr.sh`, `restart_qr.sh`, `qr-bot.service`, and `application-prod.yaml` to the server
+- Install and enable the systemd service
 
-```bash
-chmod +x ~/run_qr.sh
-cp qr-bot.service /etc/systemd/system/
-systemctl daemon-reload
-systemctl enable qr-bot
-systemctl start qr-bot
-```
+Then deploy the JAR with `deploy.bat` and start with `~/start_qr.sh` on the server.
 
 ## Day-to-Day Usage
 
 | Action | Command |
 |---|---|
-| Start | `systemctl start qr-bot` |
-| Stop | `systemctl stop qr-bot` |
-| Restart (after deploy) | `systemctl restart qr-bot` |
+| Start | `~/start_qr.sh` |
+| Stop | `~/stop_qr.sh` |
+| Restart (after deploy) | `~/restart_qr.sh` |
 | Check status | `systemctl status qr-bot` |
 | View logs | `journalctl -u qr-bot -f` |

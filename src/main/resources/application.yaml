@@ -3,5 +3,6 @@ spring:
     name: dynamic-qr-bot
 
 qr-bot:
+  discord-token: ""
   config-file: ./qr-config.yaml
   global-admin:
