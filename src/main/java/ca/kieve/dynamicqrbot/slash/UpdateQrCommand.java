@@ -1,7 +1,9 @@
 package ca.kieve.dynamicqrbot.slash;
 
 import ca.kieve.dynamicqrbot.config.QrBotProperties;
+import ca.kieve.dynamicqrbot.model.QrMapping;
 import ca.kieve.dynamicqrbot.service.BotConfigService;
+import ca.kieve.dynamicqrbot.service.QrImageService;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.IntegrationType;
@@ -15,9 +17,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class UpdateQrCommand extends BaseAdminCommand {
+    private final QrImageService m_qrImageService;
 
-    public UpdateQrCommand(QrBotProperties properties, BotConfigService configService) {
+    public UpdateQrCommand(QrBotProperties properties, BotConfigService configService,
+            QrImageService qrImageService) {
         super(properties, configService);
+        m_qrImageService = qrImageService;
     }
 
     @Override
@@ -50,6 +55,8 @@ public class UpdateQrCommand extends BaseAdminCommand {
 
         boolean updated = m_configService.updateDestination(nickname, url);
         if (updated) {
+            m_configService.getMappingByNickname(nickname)
+                    .ifPresent(m_qrImageService::generateQrImage);
             event.reply("Updated **" + nickname + "** to point to: " + url)
                     .setEphemeral(true)
                     .queue();

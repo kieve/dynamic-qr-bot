@@ -6,6 +6,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public record QrBotProperties(
         String discordToken,
         String configFile,
-        Long globalAdmin
+        Long globalAdmin,
+        String baseUrl,
+        String qrImageDir
 ) {
 }

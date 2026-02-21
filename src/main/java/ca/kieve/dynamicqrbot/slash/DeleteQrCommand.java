@@ -2,6 +2,7 @@ package ca.kieve.dynamicqrbot.slash;
 
 import ca.kieve.dynamicqrbot.config.QrBotProperties;
 import ca.kieve.dynamicqrbot.service.BotConfigService;
+import ca.kieve.dynamicqrbot.service.QrImageService;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.IntegrationType;
@@ -15,9 +16,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class DeleteQrCommand extends BaseAdminCommand {
+    private final QrImageService m_qrImageService;
 
-    public DeleteQrCommand(QrBotProperties properties, BotConfigService configService) {
+    public DeleteQrCommand(QrBotProperties properties, BotConfigService configService,
+            QrImageService qrImageService) {
         super(properties, configService);
+        m_qrImageService = qrImageService;
     }
 
     @Override
@@ -45,6 +49,7 @@ public class DeleteQrCommand extends BaseAdminCommand {
         String nickname = nicknameOption.getAsString();
         boolean deleted = m_configService.deleteMapping(nickname);
         if (deleted) {
+            m_qrImageService.deleteQrImage(nickname);
             event.reply("Deleted QR mapping **" + nickname + "**.")
                     .setEphemeral(true).queue();
         } else {

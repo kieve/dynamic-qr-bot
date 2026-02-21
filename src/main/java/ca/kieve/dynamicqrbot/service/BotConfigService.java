@@ -107,6 +107,10 @@ public class BotConfigService {
         return true;
     }
 
+    public Optional<QrMapping> getMappingByNickname(String nickname) {
+        return Optional.ofNullable(m_byNickname.get(nickname.toLowerCase()));
+    }
+
     public List<String> getNicknames() {
         return m_configData.mappings().stream()
                 .map(QrMapping::nickname)

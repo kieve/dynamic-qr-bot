@@ -1,7 +1,9 @@
 package ca.kieve.dynamicqrbot.slash;
 
 import ca.kieve.dynamicqrbot.config.QrBotProperties;
+import ca.kieve.dynamicqrbot.model.QrMapping;
 import ca.kieve.dynamicqrbot.service.BotConfigService;
+import ca.kieve.dynamicqrbot.service.QrImageService;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.IntegrationType;
 import net.dv8tion.jda.api.interactions.InteractionContextType;
@@ -13,9 +15,12 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AddQrCommand extends BaseAdminCommand {
+    private final QrImageService m_qrImageService;
 
-    public AddQrCommand(QrBotProperties properties, BotConfigService configService) {
+    public AddQrCommand(QrBotProperties properties, BotConfigService configService,
+            QrImageService qrImageService) {
         super(properties, configService);
+        m_qrImageService = qrImageService;
     }
 
     @Override
@@ -50,6 +55,7 @@ public class AddQrCommand extends BaseAdminCommand {
 
         boolean added = m_configService.addMapping(nickname, path, url);
         if (added) {
+            m_qrImageService.generateQrImage(new QrMapping(nickname, path, url));
             event.reply("Added new QR mapping **" + nickname + "** — `/"
                             + path + "` → " + url)
                     .setEphemeral(true).queue();

@@ -6,3 +6,5 @@ qr-bot:
   discord-token: ""
   config-file: ./qr-config.yaml
   global-admin:
+  base-url: http://localhost:8080
+  qr-image-dir: ./qr_images

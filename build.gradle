@@ -20,7 +20,9 @@ repositories {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-yaml'
+    implementation 'io.nayuki:qrcodegen:1.8.0'
     implementation("net.dv8tion:JDA:6.3.1") {
         exclude module: 'opus-java'
         exclude module: 'tink'
