@@ -28,5 +28,12 @@ if %ERRORLEVEL% neq 0 (
     exit /b 1
 )
 
+echo Restarting service on %REMOTE_HOST%...
+ssh %REMOTE_USER%@%REMOTE_HOST% "systemctl restart qr-bot"
+if %ERRORLEVEL% neq 0 (
+    echo Restart failed.
+    exit /b 1
+)
+
 echo Deploy complete.
 endlocal
